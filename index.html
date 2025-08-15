@@ -2,43 +2,89 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ηλιάννα</title>
-  <link rel="stylesheet" href="styles/style.css">
-  <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
-  <script defer src="src="main.js""></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ηλιάννα</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <script defer src="scripts/script.js"></script>
+    <script type="module" defer src="scripts/wishesModule.js"></script>
+
 </head>
+
 <body>
 
-    <header>
-        <h1>Το ταξίδι της Ηλιάννας ξεκινά με μαγεία και χαμόγελα</h1>
-        <p>Μία συλλογή απο τις πιο μαγικές στιγμές μας!!!</p>
-    </header>
+    <div class="wealcoming_image">
+        <img src="assets/sitepics/wealcome_pic.jpg" alt="Picture of Ηλιάννα">
+    </div>
 
-    <main>
+    <main class="site-content">
+        <h1 id="babyname">Ηλιάννα</h1>
+        <div class="content-background">
 
-        <section class="photo-gallery">
-            <div class="grid">
-                <div class="grid__item">
-                    <img src="placeholder-image-1.jpg" alt="A photo of the baby smiling">
+            <!-- SEATING / TABLE FINDER -->
+            <section id="seating">
+                <div class="container grid grid-2">
+                    <div class="card pad">
+                        <h2 class="section-title">Βρείτε το Τραπέζι σας</h2>
+                        <div class="field"><label for="seatSearch">Εισαγωγή Ονόματος</label><input id="seatSearch"
+                                placeholder="πχ.: ΕΥΑΓΓΕΙΑ ΜΑΛΑΜΑ" /></div>
+                        <p class="table-result" id="seatResult">&nbsp;</p>
+                    </div>
+                    <div class="card pad">
+                        <h3 class="section-title">Πληροφορίες</h3>
+                        <p class="muted">Εισάγετε το όνομά σας για να δείτε σε ποιο τραπέζι κάθεστε!!</p>
+                    </div>
                 </div>
-                <div class="grid__item">
-                    <img src="placeholder-image-2.jpg" alt="A photo of the baby sleeping">
+            </section>
+
+            <!-- GALLERY -->
+            <section id="gallery">
+                <div class="container">
+                    <h2 class="section-title">Μία συλλογή απο τις πιο μαγικές στιγμές μας!!!</h2>
+                    <div class="gallery" id="galleryGrid"></div>
+                    <div class="lightbox" id="lightbox" aria-modal="true" role="dialog"><img alt="Expanded" /></div>
                 </div>
-                <div class="grid__item">
-                    <img src="placeholder-image-3.jpg" alt="A photo of the baby with their family">
+            </section>
+
+            <!-- GUESTBOOK / WISHES -->
+            <section id="guestbook">
+                <div class="container grid grid-2">
+                    <div class="card pad">
+                        <h2 class="section-title">Βιβλίο Καλεσμένων</h2>
+                        <form id="wishForm" class="grid">
+                            <div class="field"><label for="wName">Εισαγωγή Ονόματος</label><input id="wName" required />
+                            </div>
+                            <div class="field"><label for="wText">Κάτνε την Ευχή σας</label><textarea id="wText"
+                                    required
+                                    placeholder="Το ταξίδι της Ηλιάννας ξεκινά με μαγεία και χαμόγελα!!"></textarea>
+                            </div>
+                            <button class="btn" type="submit">Αποστολή Ευχής</button>
+                        </form>
+                    </div>
+                    <div class="card pad">
+                        <h3 class="section-title">Ευχές</h3>
+                        <div id="wishList" class="grid"></div>
+                    </div>
                 </div>
-                </div>
-        </section>
+            </section>
+
+            <footer>
+                <p>&copy; <span id="year"></span> [Οικογένεια Παπατέγου]. All Rights Reserved.</p>
+            </footer>
+        </div>
 
     </main>
 
-    <footer>
-        <p>&copy; 2025 [Family Name]. All Rights Reserved.</p>
-        </footer>
-    
 </body>
+
 </html>
-
-

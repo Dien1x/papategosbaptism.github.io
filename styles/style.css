@@ -1,0 +1,206 @@
+html {
+  font-size: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--forms_text_color);
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* General Layout */
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+section {
+  padding: 72px 0;
+}
+.card {
+  background: var(--card_background);
+  border: 1px solid var(--card_border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+.grid {
+  display: grid;
+  gap: 20px;
+}
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wealcoming_image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* full screen height */
+  overflow: hidden;
+  z-index: -1; /* behind content */
+  background: linear-gradient(
+    180deg,
+    var(--background_color_grad_high),
+    var(--background_color_grad_med) 60%,
+    var(--background_color_grad_low)
+  );
+}
+.wealcoming_image img {
+  /* child of wealcoming image class */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* crop nicely */
+  transition: opacity 0.3s ease-out;
+}
+.site-content {
+  margin-top: 100vh; /* push content below hero */
+}
+.content-background {
+  /* content background whithout babyname */
+  background: linear-gradient(
+    180deg,
+    var(--background_color_grad_high),
+    var(--background_color_grad_med) 60%,
+    var(--background_color_grad_low)
+  );
+  height: fit-content; /* full screen height */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#babyname {
+  font-family: BabyName, sans-serif;
+  color: var(--font_color);
+  font-size: 5rem;
+  text-align: center;
+  height: 2em;
+  width: 100vw;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: var(--button_color);
+  font-weight: 700;
+  border: 0;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+/* Cards & forms */
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(28px, 4vw, 40px);
+  margin: 0 0 12px;
+}
+.muted {
+  color: var(--muted);
+}
+.card.pad {
+  padding: 24px;
+}
+.field {
+  display: grid;
+  gap: 8px;
+}
+label {
+  font-size: 14px;
+  color: var(--muted);
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--forms_background);
+  border: 1px solid var(--forms_border);
+  color: var(--forms_text_color);
+  border-radius: 12px;
+  outline: none;
+}
+textarea {
+  min-height: 110px;
+}
+
+/* Table seating */
+.table-result {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Footer */
+footer {
+  padding: 56px 0 80px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+.gallery img {
+  border-radius: 16px;
+  border: 1px solid var(--gallery_border);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.gallery img:hover {
+  transform: translateY(-2px);
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: var(--lighbox_background);
+  display: none;
+  place-items: center;
+  z-index: 100;
+}
+.lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  border-radius: 16px;
+}
+.lightbox.open {
+  display: grid;
+}

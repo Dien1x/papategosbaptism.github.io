@@ -1,0 +1,35 @@
+:root {
+  --background_color_grad_high: rgb(88, 255, 32);
+  --background_color_grad_med: rgb(198, 137, 24);
+  --background_color_grad_low: rgb(55, 0, 236);
+  --font_color: #ff0000;
+  --card_background: rgba(17, 24, 39, 0.6);
+  --card_border: rgba(255, 255, 255, 0.08);
+  --forms_background: rgba(255, 255, 255, 0.04);
+  --forms_border: rgba(255, 255, 255, 0.12);
+  --forms_text_color: #e5e7eb; /* gray-200 */
+  --gallery_border: rgba(255, 255, 255, 0.1);
+  --lightbox_background: rgba(0, 0, 0, 0.8);
+  --button_color: #0b1022; /* orange-500 */
+  --muted: #94a3b8; /* slate-400 */
+  --brand: #a78bfa; /* violet-400 */
+  --brand-2: #22d3ee; /* cyan-400 */
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --container: 1100px;
+}
+
+@font-face {
+  font-family: "TitleFont";
+  src: url("../fonts/GFS_NeoHellenic/GFSNeohellenicBold.otf");
+}
+
+@font-face {
+  font-family: "BasicTextFont";
+  src: url("../fonts/Open_Sans/OpenSans-Regular-BF63e1a1f49f2a8.ttf");
+}
+
+@font-face {
+  font-family: "BabyName";
+  src: url("../fonts/pf_scandal/PF_Scandal_Black.otf");
+}
