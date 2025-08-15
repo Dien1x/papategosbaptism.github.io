@@ -10,6 +10,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Your Firebase config
@@ -90,3 +91,4 @@ document.getElementById("download-wishes").addEventListener("click", async () =>
     URL.revokeObjectURL(url);
 
 });
+
