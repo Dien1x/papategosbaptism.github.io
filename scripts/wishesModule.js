@@ -70,7 +70,7 @@ wishForm.addEventListener("submit", async (e) => {
 
 // ====== DOWNLOAD WISHES AS JSON ======
 
-document.getElementById("exportBtn").addEventListener("click", async () => {
+document.getElementById("download-wishes").addEventListener("click", async () => {
     const snapshot = await getDocs(q);
     const wishes = snapshot.docs.map(doc => doc.data());
     
@@ -88,4 +88,5 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
     a.click();
 
     URL.revokeObjectURL(url);
+
 });
