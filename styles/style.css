@@ -204,7 +204,10 @@ footer {
 .lightbox.open {
   display: grid;
 }
-
+@media (max-width: 420px) {
+  .lightbox.open {
+  display: none;
+}
 #download-wishes {
   position: fixed;
   bottom: 20px;
@@ -218,3 +221,4 @@ footer {
   z-index: 1000;
   opacity: 0;
 }
+
