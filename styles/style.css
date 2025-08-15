@@ -204,3 +204,16 @@ footer {
 .lightbox.open {
   display: grid;
 }
+
+#download-wishes {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: url('../assets/icons/download.svg') no-repeat center center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}

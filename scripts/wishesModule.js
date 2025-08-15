@@ -67,3 +67,25 @@ wishForm.addEventListener("submit", async (e) => {
   await addDoc(wishesCol, row);
   wishForm.reset();
 });
+
+// ====== DOWNLOAD WISHES AS JSON ======
+
+document.getElementById("exportBtn").addEventListener("click", async () => {
+    const snapshot = await getDocs(q);
+    const wishes = snapshot.docs.map(doc => doc.data());
+    
+    let text = "Name\tDate\tWish\n";
+    wishes.forEach(w => {
+        text += `${w.name}\t${w.ts?.toDate().toLocaleDateString()}\t${w.text}\n`;
+    });
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "wishes.txt"; // could be .csv too
+    a.click();
+
+    URL.revokeObjectURL(url);
+});
