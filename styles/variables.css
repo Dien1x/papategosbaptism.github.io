@@ -7,13 +7,14 @@
   --card_border: rgba(255, 255, 255, 0.08);
   --forms_background: rgba(255, 255, 255, 0.04);
   --forms_border: rgba(255, 255, 255, 0.12);
-  --forms_text_color: #e5e7eb; /* gray-200 */
+  --forms_text_color: #e5e7eb; 
   --gallery_border: rgba(255, 255, 255, 0.1);
   --lightbox_background: rgba(0, 0, 0, 0.8);
-  --button_color: #0b1022; /* orange-500 */
-  --muted: #94a3b8; /* slate-400 */
-  --brand: #a78bfa; /* violet-400 */
-  --brand-2: #22d3ee; /* cyan-400 */
+  --button_color: #0b1022; 
+  --svg_color: #0b1022; 
+  --muted: #94a3b8; 
+  --brand: #a78bfa; 
+  --brand-2: #22d3ee; 
   --radius: 18px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   --container: 1100px;

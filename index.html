@@ -80,6 +80,66 @@
                 </div>
             </section>
 
+            <!-- GUEST PHOTOS -->
+            <section id="upload-photos">
+                <div class="container grid">
+                    <div class="solo-card">
+                        <div class="card pad centerpad">
+                            <div class="photoIcon">
+                                <svg viewBox="0 0 200 200" role="img" aria-label="Guest photos animation"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Camera body -->
+                                    <rect x="40" y="70" width="120" height="80" rx="12" ry="12" fill="currentColor"
+                                        opacity="0.9" />
+                                    <!-- Lens -->
+                                    <circle cx="100" cy="110" r="26" fill="white" opacity="0.95" />
+                                    <circle cx="100" cy="110" r="18" fill="currentColor" opacity="0.85" />
+                                    <!-- Top bump -->
+                                    <rect x="60" y="55" width="36" height="18" rx="6" ry="6" fill="currentColor" />
+                                    <!-- Shutter/flash indicator -->
+                                    <circle cx="132" cy="65" r="6" fill="white">
+                                        <animate attributeName="r" values="6;10;6" dur="1.6s" repeatCount="indefinite"
+                                            keyTimes="0;0.1;1" />
+                                        <animate attributeName="opacity" values="1;0.3;1" dur="1.6s"
+                                            repeatCount="indefinite" keyTimes="0;0.1;1" />
+                                    </circle>
+
+                                    <!-- Stars (flash particles) -->
+                                    <g opacity="0.0">
+                                        <polygon
+                                            points="100,20 104,30 115,32 106,39 108,50 100,44 92,50 94,39 85,32 96,30"
+                                            fill="white">
+                                            <animate attributeName="opacity" values="0;1;0" dur="1.6s"
+                                                repeatCount="indefinite" begin="0s" keyTimes="0;0.1;1" />
+                                            <animateTransform attributeName="transform" type="scale"
+                                                values="0.6;1.2;0.6" dur="1.6s" repeatCount="indefinite"
+                                                additive="sum" />
+                                        </polygon>
+                                        <circle cx="70" cy="40" r="2" fill="white">
+                                            <animate attributeName="opacity" values="0;1;0" dur="1.6s"
+                                                repeatCount="indefinite" begin="0s" />
+                                        </circle>
+                                        <circle cx="140" cy="42" r="2" fill="white">
+                                            <animate attributeName="opacity" values="0;1;0" dur="1.6s"
+                                                repeatCount="indefinite" begin="0.05s" />
+                                        </circle>
+                                    </g>
+                                </svg>
+                            </div>
+
+
+
+                            <h1 class="section-title">Φωτογραφίες Καλεσμένων</h1>
+                            <p class="muted">Αναδείξτε το φωτογραφικό σας ταλέντο!
+                            <p class="muted">
+                                Δείτε τη photo gallery και μοιραστείτε μαζί μας τις φωτογραφίες σας
+                                και τα βίντεο της βάπτισης.</p>
+                            <a href="" id="uploadLink" class="btn" style="margin: 20px;">Ανεβάστε τις Φωτογραφίες
+                                σας</a>
+                        </div>
+                    </div>
+            </section>
+
             <footer>
                 <p>&copy; <span id="year"></span> [Οικογένεια Παπατέγου]. All Rights Reserved.</p>
             </footer>
@@ -91,6 +151,3 @@
 
 
 </html>
-
-
-
