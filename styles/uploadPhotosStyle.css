@@ -1,0 +1,55 @@
+#babyImage {
+    width: 180px;              /* Set desired size */
+    height: 180px;
+    border-radius: 50%;        /* Make it a circle */
+    border: 4px solid #ccc;    /* Add border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;          /* Prevent overflow */
+    margin: 0 auto;            /* Center horizontally */
+}
+
+#babyImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* Ensure image covers circle */
+    border-radius: 50%;        /* Optional: keep image round */
+    display: block;
+}
+
+#title {
+  font-family: Dancing script,sans-serif;
+  color: var(--font_color);
+  font-size: 3rem;
+  text-align: center;
+  margin: 0; /* Add some margin for spacing */
+}
+
+.menu-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between buttons */
+  flex-direction: row;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-buttons .btn.active {
+  background: var(--brand-2);
+  color: var(--selected_btn_color);
+  box-shadow: 0 0 8px var(--brand-2);
+  /* Add any other styles for selected button */
+}
+
+footer p {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    text-align: center; /* Center text */
+}

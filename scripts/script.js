@@ -1,4 +1,4 @@
-// Smooth anchor scroll (native behavior is fine, but this improves offset)
+// Smooth anchor scroll
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener("click", (e) => {
     const id = a.getAttribute("href");

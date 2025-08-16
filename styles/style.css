@@ -15,6 +15,12 @@ body {
     "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
   color: var(--forms_text_color);
   margin: 0;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 a {
@@ -71,6 +77,17 @@ section {
   }
 }
 
+.flex{
+  padding-top: 8em;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
 .wealcoming_image {
   position: fixed;
   top: 0;
@@ -104,7 +121,8 @@ section {
     var(--background_color_grad_med) 60%,
     var(--background_color_grad_low)
   );
-  height: fit-content; /* full screen height */
+    min-height: 100vh;
+  height: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -263,3 +281,4 @@ footer {
     height: 200px;
   }
 }
+
