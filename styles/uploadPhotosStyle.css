@@ -1,3 +1,13 @@
+#adminLogin {
+  font-family: inherit;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 70px;
+  height: 35px;
+}
+
 #babyImage {
   width: 180px; /* Set desired size */
   height: 180px;
@@ -49,7 +59,6 @@ footer {
   background: var(--brand-2);
   color: var(--selected_btn_color);
   box-shadow: 0 0 8px var(--brand-2);
-  /* Add any other styles for selected button */
 }
 
 footer p {
@@ -131,4 +140,10 @@ form {
   border: 0;
   box-shadow: var(--shadow);
   cursor: pointer;
+}
+
+.uploader-group {
+  margin-bottom: 30px; /* Adjust the space as needed */
+  padding: 10px;        /* Optional: inner spacing */
+  border-bottom: 1px solid #ccc; /* Optional: separator line */
 }

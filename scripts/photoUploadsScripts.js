@@ -58,7 +58,6 @@ function renderUploadForm() {
 
 function renderGalleryContainer() {
   galleryContent.innerHTML = `
-    <h2>Βιβλιοθήκη Εικόνων</h2>
     <div id="gallery"></div>
   `;
 }
@@ -197,7 +196,7 @@ function initLightbox() {
 document
   .getElementById("uploadButton")
   .addEventListener("click", renderUploadForm);
-document.getElementById("watchGallery").addEventListener("click", () => {
+document.getElementById("watchGallery").addEventListener("click", (e) => {
   renderGalleryContainer();
   setupLiveGallery();
 });
@@ -212,5 +211,17 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
         .querySelector(id)
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  });
+});
+
+/* Active button styles */
+const buttons = document.querySelectorAll('#uploadButton, #watchGallery');
+
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Remove 'active' from all buttons
+    buttons.forEach(b => b.classList.remove('active'));
+    // Add 'active' to the clicked button
+    btn.classList.add('active');
   });
 });
