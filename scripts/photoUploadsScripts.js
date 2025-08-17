@@ -1,9 +1,9 @@
 // ===== CONFIG =====
 const REQUIRE_APPROVAL = true; // set to false to auto-approve uploads
+const CLOUDINARY_CLOUD_NAME = "dznoiv1vf";
+const CLOUDINARY_UNSIGNED_PRESET = "ngmtkuac";
 
-/* Gallery upload and rendering script */
-
- // ===== FIREBASE IMPORTS =====
+// ===== FIREBASE IMPORTS =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -11,30 +11,21 @@ import {
   addDoc,
   onSnapshot,
   query,
-  orderBy,
-  updateDoc,
-  doc
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDYoXsUdZ5Y1Oavwc0hg_kT6_23yFAu7VE",
-  authDomain: "mywishpriject.firebaseapp.com",
-  projectId: "mywishpriject",
-  storageBucket: "mywishpriject.firebasestorage.app",
-  messagingSenderId: "14036030221",
-  appId: "1:14036030221:web:e9f104aca9f1e8df071644",
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+  projectId: "YOUR_FIREBASE_PROJECT_ID",
+  storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_FIREBASE_SENDER_ID",
+  appId: "YOUR_FIREBASE_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 // ===== HELPERS =====
 function normalizeName(name) {
@@ -48,40 +39,67 @@ function normalizeName(name) {
 }
 
 // ===== ELEMENTS =====
-const uploadForm = document.getElementById("uploadForm");
-const gallery = document.getElementById("gallery");
-const uploadsCol = collection(db, "uploads");
+const galleryContent = document.getElementById("galleryContent");
+
+// ===== DYNAMIC FORMS =====
+function renderUploadForm() {
+  galleryContent.innerHTML = `
+    <h2>Ανεβάστε τις Φωτογραφίες/Βίντεο σας ✨</h2>
+    <form id="uploadForm">
+      <input id="uploaderName" type="text" placeholder="Your Name" required />
+      <input id="fileInput" type="file" accept="image/*,video/*" multiple required />
+      <button type="submit">Upload</button>
+    </form>
+  `;
+  const uploadForm = document.getElementById("uploadForm");
+  uploadForm.addEventListener("submit", handleUpload);
+}
+
+function renderGalleryContainer() {
+  galleryContent.innerHTML = `
+    <h2>Βιβλιοθήκη Εικόνων</h2>
+    <div id="gallery" class="grid"></div>
+  `;
+}
 
 // ===== UPLOAD HANDLER =====
-uploadForm.addEventListener("submit", async (e) => {
+async function handleUpload(e) {
   e.preventDefault();
-
   const rawName = document.getElementById("uploaderName").value;
   const files = document.getElementById("fileInput").files;
   if (!files.length) return;
 
   const prettyName = normalizeName(rawName);
+  const uploadsCol = collection(db, "uploads");
 
   for (let file of files) {
-    const fileRef = ref(storage, `uploads/${Date.now()}_${file.name}`);
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
 
-await addDoc(uploadsCol, {
-  uploaderName: prettyName,
-  url,
-  type: file.type.startsWith("video") ? "video" : "image",
-  ts: Date.now(),
-  approved: !REQUIRE_APPROVAL // if no approval needed, mark true
-});
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`, {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    const url = data.secure_url;
+
+    await addDoc(uploadsCol, {
+      uploaderName: prettyName,
+      url,
+      type: file.type.startsWith("video") ? "video" : "image",
+      ts: Date.now(),
+      approved: !REQUIRE_APPROVAL
+    });
   }
 
-  uploadForm.reset();
+  e.target.reset();
   if (REQUIRE_APPROVAL) alert("Uploaded! Waiting for approval.");
-});
+}
 
 // ===== GALLERY RENDER =====
 function renderGallery(items) {
+  const gallery = document.getElementById("gallery");
   gallery.innerHTML = items
     .map(
       (item) => `
@@ -99,11 +117,21 @@ function renderGallery(items) {
 }
 
 // ===== LIVE LISTENER (Only Approved) =====
-const q = query(uploadsCol, orderBy("ts", "desc"));
-onSnapshot(q, (snapshot) => {
-  const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  const approvedItems = items.filter(i => i.approved);
-  renderGallery(approvedItems);
+function setupLiveGallery() {
+  const uploadsCol = collection(db, "uploads");
+  const q = query(uploadsCol, orderBy("ts", "desc"));
+  onSnapshot(q, (snapshot) => {
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const approvedItems = items.filter(i => i.approved);
+    renderGallery(approvedItems);
+  });
+}
+
+// ===== INITIAL SETUP =====
+document.getElementById('uploadButton').addEventListener('click', renderUploadForm);
+document.getElementById('watchGallery').addEventListener('click', () => {
+  renderGalleryContainer();
+  setupLiveGallery();
 });
 
 // Smooth anchor scroll
@@ -112,40 +140,7 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
     const id = a.getAttribute("href");
     if (id.length > 1) {
       e.preventDefault();
-      document
-        .querySelector(id)
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  });
-});
-
-document.getElementById('uploadButton').addEventListener('click', function() {
-    const content = document.getElementById('galleryContent');
-    content.innerHTML = `
-  <h2>Ανεβάστε τις Φωτογραφίες σας ✨</h2>
-
-  <form id="uploadForm">
-    <input id="uploaderName" type="text" placeholder="Your Name" required />
-    <input id="fileInput" type="file" accept="image/*,video/*" multiple required />
-    <button type="submit">Upload</button>
-  </form>
-    `;
-    content.className = 'upload-content';
-});
-
-document.getElementById('watchGallery').addEventListener('click', function() {
-    const content = document.getElementById('galleryContent');
-    content.innerHTML = `
-  <h2>Βιβλιοθήκη Εικόνων</h2>
-  <div id="gallery" class="grid"></div>
-    `;
-    content.className = 'gallery-content';
-});
-
-const buttons = document.querySelectorAll('.menu-buttons .btn');
-buttons.forEach(btn => {
-  btn.addEventListener('click', function() {
-    buttons.forEach(b => b.classList.remove('active')); // Remove from all
-    this.classList.add('active'); // Add to clicked
   });
 });
