@@ -110,6 +110,8 @@ section {
   height: 100%;
   object-fit: cover; /* crop nicely */
   transition: opacity 0.3s ease-out;
+  max-height: none;
+  justify-self: center;
 }
 .site-content {
   margin-top: 100vh; /* push content below hero */
