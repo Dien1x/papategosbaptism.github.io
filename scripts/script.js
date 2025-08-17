@@ -11,16 +11,24 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
   });
 });
 
-/* Image fading on scrolling */ 
-window.addEventListener("scroll", () => {
-  const hero = document.querySelector(".wealcoming_image img");
-  const scrollY = window.scrollY;
-  const fadeStart = 0; // start fade immediately
-  const fadeEnd = window.innerWidth; // finish fade after 300px
+const container = document.querySelector("body"); // container holding scrollable content
+const hero = document.querySelector(".wealcoming_image img");
+let fadeEnd = window.innerHeight * 1.5; 
+
+// Update fadeEnd on window resize
+window.addEventListener("resize", () => {
+  fadeEnd = window.innerHeight * 1.5;
+  console.log("fadeEnd updated:", fadeEnd);
+});
+
+container.addEventListener("scroll", () => {
+  const scrollY = container.scrollTop;
+  const fadeStart = 0;
   let opacity = 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart);
   if (opacity < 0) opacity = 0;
   hero.style.opacity = opacity;
 });
+
 
 // Footer year
 document.getElementById("year").textContent = new Date().getFullYear();

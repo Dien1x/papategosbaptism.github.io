@@ -34,11 +34,15 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
+  justify-content: center;
+      align-items: center;
+      text-align: center;
     }
     .media-card img,
     .media-card video {
-      width: 100%;
       border-radius: 10px;
+      width: 100%;
+      max-width: max-content;
     }
     .actions {
       display: flex;
