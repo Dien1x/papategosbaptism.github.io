@@ -26,7 +26,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const uploadsCol = collection(db, "uploads");
 
 // ===== HELPERS =====
 function normalizeName(name) {
@@ -40,17 +39,37 @@ function normalizeName(name) {
 }
 
 // ===== ELEMENTS =====
-const uploadForm = document.getElementById("uploadForm");
-const gallery = document.getElementById("gallery");
+const galleryContent = document.getElementById("galleryContent");
+
+// ===== DYNAMIC FORMS =====
+function renderUploadForm() {
+  galleryContent.innerHTML = `
+    <h2>Ανεβάστε τις Φωτογραφίες/Βίντεο σας ✨</h2>
+    <form id="uploadForm">
+      <input id="uploaderName" type="text" placeholder="Your Name" required />
+      <input id="fileInput" type="file" accept="image/*,video/*" multiple required />
+      <button type="submit">Upload</button>
+    </form>
+  `;
+  document.getElementById("uploadForm").addEventListener("submit", handleUpload);
+}
+
+function renderGalleryContainer() {
+  galleryContent.innerHTML = `
+    <h2>Βιβλιοθήκη Εικόνων</h2>
+    <div id="gallery"></div>
+  `;
+}
 
 // ===== UPLOAD HANDLER =====
-uploadForm.addEventListener("submit", async (e) => {
+async function handleUpload(e) {
   e.preventDefault();
   const rawName = document.getElementById("uploaderName").value;
   const files = document.getElementById("fileInput").files;
   if (!files.length) return;
 
   const prettyName = normalizeName(rawName);
+  const uploadsCol = collection(db, "uploads");
 
   for (let file of files) {
     const formData = new FormData();
@@ -62,22 +81,25 @@ uploadForm.addEventListener("submit", async (e) => {
       body: formData
     });
     const data = await res.json();
+    const url = data.secure_url;
 
     await addDoc(uploadsCol, {
       uploaderName: prettyName,
-      url: data.secure_url,
+      url,
       type: file.type.startsWith("video") ? "video" : "image",
       ts: Date.now(),
       approved: !REQUIRE_APPROVAL
     });
   }
 
-  uploadForm.reset();
+  e.target.reset();
   if (REQUIRE_APPROVAL) alert("Uploaded! Waiting for approval.");
-});
+}
 
 // ===== GALLERY RENDER =====
 function renderGallery(items) {
+  const gallery = document.getElementById("gallery");
+
   // Group by uploader name
   const grouped = items.reduce((acc, item) => {
     if (!acc[item.uploaderName]) acc[item.uploaderName] = [];
@@ -90,7 +112,7 @@ function renderGallery(items) {
       <div class="uploader-group">
         <h3>${name}</h3>
         <div class="gallery">
-          ${uploads.map(u => 
+          ${uploads.map(u =>
             u.type === "image"
               ? `<img src="${u.url}" alt="Upload" data-lightbox>`
               : `<video src="${u.url}" controls></video>`
@@ -99,20 +121,31 @@ function renderGallery(items) {
       </div>
     `).join('');
 
-  initLightbox(); // initialize lightbox for new images
+  initLightbox();
 }
 
 // ===== LIVE LISTENER =====
-const q = query(uploadsCol, orderBy("ts", "desc"));
-onSnapshot(q, (snapshot) => {
-  const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  const approvedItems = items.filter(i => i.approved);
-  renderGallery(approvedItems);
-});
+function setupLiveGallery() {
+  const uploadsCol = collection(db, "uploads");
+  const q = query(uploadsCol, orderBy("ts", "desc"));
+  onSnapshot(q, snapshot => {
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const approvedItems = items.filter(i => i.approved);
+    renderGallery(approvedItems);
+  });
+}
 
 // ===== LIGHTBOX =====
 function initLightbox() {
-  const lightbox = document.getElementById("lightbox") || createLightbox();
+  let lightbox = document.getElementById("lightbox");
+  if (!lightbox) {
+    lightbox = document.createElement("div");
+    lightbox.id = "lightbox";
+    lightbox.className = "lightbox";
+    lightbox.onclick = () => lightbox.classList.remove("open");
+    document.body.appendChild(lightbox);
+  }
+
   document.querySelectorAll('img[data-lightbox]').forEach(img => {
     img.onclick = () => {
       lightbox.innerHTML = `<img src="${img.src}">`;
@@ -121,11 +154,20 @@ function initLightbox() {
   });
 }
 
-function createLightbox() {
-  const lb = document.createElement("div");
-  lb.id = "lightbox";
-  lb.className = "lightbox";
-  lb.onclick = () => lb.classList.remove("open");
-  document.body.appendChild(lb);
-  return lb;
-}
+// ===== INITIAL SETUP =====
+document.getElementById('uploadButton').addEventListener('click', renderUploadForm);
+document.getElementById('watchGallery').addEventListener('click', () => {
+  renderGalleryContainer();
+  setupLiveGallery();
+});
+
+// Smooth anchor scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", e => {
+    const id = a.getAttribute("href");
+    if (id.length > 1) {
+      e.preventDefault();
+      document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
