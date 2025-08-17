@@ -1,0 +1,54 @@
+body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 { margin-bottom: 10px; }
+    .filters {
+      margin-bottom: 20px;
+    }
+    .filters select {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 15px;
+    }
+    .media-card {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .media-card img,
+    .media-card video {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+    }
+    .btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .approve { background: #4caf50; color: white; }
+    .download { background: #2196f3; color: white; text-decoration: none; text-align: center; }
+    .approved-label {
+      color: #4caf50;
+      font-weight: bold;
+    }

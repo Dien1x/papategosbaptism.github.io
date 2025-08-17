@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Gallery</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/admin.css">
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <script defer src="scripts/script.js"></script>
+    <script type="module" defer src="scripts/admin.js"></script>
+
+</head>
+
+<body>
+  <h1>📸 Admin Panel</h1>
+  
+  <div class="filters">
+    <label for="filterSelect">Show:</label>
+    <select id="filterSelect">
+      <option value="all">All Uploads</option>
+      <option value="pending">Pending Approval</option>
+      <option value="approved">Approved Only</option>
+    </select>
+  </div>
+
+  <div id="mediaGrid" class="media-grid"></div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
