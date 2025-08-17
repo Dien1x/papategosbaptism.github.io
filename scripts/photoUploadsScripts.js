@@ -16,12 +16,12 @@ import {
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-  projectId: "YOUR_FIREBASE_PROJECT_ID",
-  storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_FIREBASE_SENDER_ID",
-  appId: "YOUR_FIREBASE_APP_ID"
+  apiKey: "AIzaSyDYoXsUdZ5Y1Oavwc0hg_kT6_23yFAu7VE",
+  authDomain: "mywishpriject.firebaseapp.com",
+  projectId: "mywishpriject",
+  storageBucket: "mywishpriject.firebasestorage.app",
+  messagingSenderId: "14036030221",
+  appId: "1:14036030221:web:e9f104aca9f1e8df071644",
 };
 
 const app = initializeApp(firebaseConfig);
