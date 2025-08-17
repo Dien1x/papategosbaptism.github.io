@@ -65,40 +65,93 @@ function renderGalleryContainer() {
 // ===== UPLOAD HANDLER =====
 async function handleUpload(e) {
   e.preventDefault();
+
+  const uploadBtn = e.target.querySelector("button[type='submit']");
+  uploadBtn.disabled = true;
+  uploadBtn.textContent = "Uploading...";
+
   const rawName = document.getElementById("uploaderName").value;
   const files = document.getElementById("fileInput").files;
-  if (!files.length) return;
+  if (!files.length) {
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = "Upload";
+    return;
+  }
 
   const prettyName = normalizeName(rawName);
   const uploadsCol = collection(db, "uploads");
 
-  for (let file of files) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
+  // Clear any old progress bars
+  const oldBars = document.querySelectorAll(".upload-progress");
+  oldBars.forEach(b => b.remove());
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const data = await res.json();
-    const url = data.secure_url;
+  try {
+    for (let file of files) {
+      // Create progress bar
+      const progressContainer = document.createElement("div");
+      progressContainer.className = "upload-progress";
+      progressContainer.innerHTML = `
+        <span>${file.name}</span>
+        <progress value="0" max="100"></progress>
+      `;
+      galleryContent.appendChild(progressContainer);
+      const progressBar = progressContainer.querySelector("progress");
 
-    await addDoc(uploadsCol, {
-      uploaderName: prettyName,
-      url,
-      type: file.type.startsWith("video") ? "video" : "image",
-      ts: Date.now(),
-      approved: !REQUIRE_APPROVAL,
-    });
+      // Use XMLHttpRequest to track progress
+      await new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`);
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100);
+            progressBar.value = percent;
+          }
+        };
+
+        xhr.onload = async () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            const url = data.secure_url;
+            await addDoc(uploadsCol, {
+              uploaderName: prettyName,
+              url,
+              type: file.type.startsWith("video") ? "video" : "image",
+              ts: Date.now(),
+              approved: !REQUIRE_APPROVAL
+            });
+            resolve();
+          } else {
+            reject(`Upload failed: ${xhr.statusText}`);
+          }
+        };
+
+        xhr.onerror = () => reject("Upload failed due to network error");
+        xhr.send(formData);
+      });
+    }
+
+    e.target.reset();
+
+    // Upload complete message
+    const msg = document.createElement("div");
+    msg.textContent = "All uploads complete! 🎉";
+    msg.style.color = "green";
+    galleryContent.appendChild(msg);
+    setTimeout(() => msg.remove(), 3000);
+
+  } catch (err) {
+    alert(err);
+  } finally {
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = "Upload";
   }
-
-  e.target.reset();
-  if (REQUIRE_APPROVAL) alert("Uploaded! Waiting for approval.");
 }
+
 
 // ===== GALLERY RENDER =====
 function renderGallery(items) {
