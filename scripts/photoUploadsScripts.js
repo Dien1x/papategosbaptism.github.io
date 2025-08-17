@@ -11,7 +11,7 @@ import {
   addDoc,
   onSnapshot,
   query,
-  orderBy
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Firebase config
@@ -34,7 +34,7 @@ function normalizeName(name) {
     .toLowerCase()
     .replace(/\s+/g, " ")
     .split(" ")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 }
 
@@ -46,12 +46,14 @@ function renderUploadForm() {
   galleryContent.innerHTML = `
     <h2>Ανεβάστε τις Φωτογραφίες/Βίντεο σας ✨</h2>
     <form id="uploadForm">
-      <input id="uploaderName" type="text" placeholder="Your Name" required />
+      <input id="uploaderName" type="text" placeholder="Όνομα Αποστολέα" required />
       <input id="fileInput" type="file" accept="image/*,video/*" multiple required />
-      <button type="submit">Upload</button>
+      <button class="btn" type="submit">Upload</button>
     </form>
   `;
-  document.getElementById("uploadForm").addEventListener("submit", handleUpload);
+  document
+    .getElementById("uploadForm")
+    .addEventListener("submit", handleUpload);
 }
 
 function renderGalleryContainer() {
@@ -76,10 +78,13 @@ async function handleUpload(e) {
     formData.append("file", file);
     formData.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`, {
-      method: "POST",
-      body: formData
-    });
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     const data = await res.json();
     const url = data.secure_url;
 
@@ -88,7 +93,7 @@ async function handleUpload(e) {
       url,
       type: file.type.startsWith("video") ? "video" : "image",
       ts: Date.now(),
-      approved: !REQUIRE_APPROVAL
+      approved: !REQUIRE_APPROVAL,
     });
   }
 
@@ -108,18 +113,23 @@ function renderGallery(items) {
   }, {});
 
   gallery.innerHTML = Object.entries(grouped)
-    .map(([name, uploads]) => `
+    .map(
+      ([name, uploads]) => `
       <div class="uploader-group">
         <h3>${name}</h3>
         <div class="gallery">
-          ${uploads.map(u =>
-            u.type === "image"
-              ? `<img src="${u.url}" alt="Upload" data-lightbox>`
-              : `<video src="${u.url}" controls></video>`
-          ).join('')}
+          ${uploads
+            .map((u) =>
+              u.type === "image"
+                ? `<img src="${u.url}" alt="Upload" data-lightbox>`
+                : `<video src="${u.url}" controls data-lightbox></video>`
+            )
+            .join("")}
         </div>
       </div>
-    `).join('');
+    `
+    )
+    .join("");
 
   initLightbox();
 }
@@ -128,9 +138,9 @@ function renderGallery(items) {
 function setupLiveGallery() {
   const uploadsCol = collection(db, "uploads");
   const q = query(uploadsCol, orderBy("ts", "desc"));
-  onSnapshot(q, snapshot => {
-    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    const approvedItems = items.filter(i => i.approved);
+  onSnapshot(q, (snapshot) => {
+    const items = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const approvedItems = items.filter((i) => i.approved);
     renderGallery(approvedItems);
   });
 }
@@ -142,32 +152,65 @@ function initLightbox() {
     lightbox = document.createElement("div");
     lightbox.id = "lightbox";
     lightbox.className = "lightbox";
-    lightbox.onclick = () => lightbox.classList.remove("open");
+    lightbox.onclick = () => {
+      const video = lightbox.querySelector("video");
+      if (video) video.pause();
+      lightbox.classList.remove("open");
+    };
     document.body.appendChild(lightbox);
   }
 
-  document.querySelectorAll('img[data-lightbox]').forEach(img => {
+  // Images
+  document.querySelectorAll("img[data-lightbox]").forEach((img) => {
     img.onclick = () => {
       lightbox.innerHTML = `<img src="${img.src}">`;
       lightbox.classList.add("open");
     };
   });
+
+  // Videos
+  document.querySelectorAll("video[data-lightbox]").forEach((videoEl) => {
+    videoEl.onclick = (e) => {
+      e.stopPropagation();
+
+      if (window.innerWidth <= 420) {
+        // small screens, play/pause inline
+        if (videoEl.paused) videoEl.play();
+        else videoEl.pause();
+        return;
+      }
+
+      lightbox.innerHTML = `<video src="${videoEl.src}" controls autoplay></video>`;
+      lightbox.classList.add("open");
+
+      const videoInLightbox = lightbox.querySelector("video");
+      videoInLightbox.onclick = (ev) => {
+        ev.stopPropagation();
+        if (videoInLightbox.paused) videoInLightbox.play();
+        else videoInLightbox.pause();
+      };
+    };
+  });
 }
 
 // ===== INITIAL SETUP =====
-document.getElementById('uploadButton').addEventListener('click', renderUploadForm);
-document.getElementById('watchGallery').addEventListener('click', () => {
+document
+  .getElementById("uploadButton")
+  .addEventListener("click", renderUploadForm);
+document.getElementById("watchGallery").addEventListener("click", () => {
   renderGalleryContainer();
   setupLiveGallery();
 });
 
 // Smooth anchor scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener("click", e => {
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+  a.addEventListener("click", (e) => {
     const id = a.getAttribute("href");
     if (id.length > 1) {
       e.preventDefault();
-      document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document
+        .querySelector(id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
 });

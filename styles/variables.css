@@ -2,7 +2,7 @@
   --background_color_grad_high: rgb(88, 255, 32);
   --background_color_grad_med: rgb(198, 137, 24);
   --background_color_grad_low: rgb(55, 0, 236);
-  --font_color: #ff0000;
+  --font_color: rgb(255, 166, 0);
   --card_background: rgba(17, 24, 39, 0.6);
   --card_border: rgba(255, 255, 255, 0.08);
   --forms_background: rgba(255, 255, 255, 0.04);
@@ -19,6 +19,7 @@
   --radius: 18px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   --container: 1100px;
+  --border_color: var(--font_color);
 }
 
 @font-face {

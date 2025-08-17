@@ -34,7 +34,7 @@ img {
 }
 
 textarea {
-    resize: none;
+  resize: none;
 }
 
 /* General Layout */
@@ -77,7 +77,7 @@ section {
   }
 }
 
-.flex{
+.flex {
   padding-top: 8em;
   display: flex;
   gap: 20px;
@@ -121,7 +121,7 @@ section {
     var(--background_color_grad_med) 60%,
     var(--background_color_grad_low)
   );
-    min-height: 100vh;
+  min-height: 100vh;
   height: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -163,11 +163,11 @@ section {
 .card.pad {
   padding: 24px;
 }
-.card.centerpad{
+.card.centerpad {
   text-align: center;
   width: fit-content;
 }
-#upload-photos a{
+#upload-photos a {
   width: fit-content;
 }
 
@@ -240,8 +240,8 @@ footer {
 }
 @media (max-width: 420px) {
   .lightbox.open {
-  display: none;
-}
+    display: none;
+  }
 }
 
 #download-wishes {
@@ -250,7 +250,7 @@ footer {
   right: 20px;
   width: 60px;
   height: 60px;
-  background: url('../assets/icons/download.svg') no-repeat center center;
+  background: url("../assets/icons/download.svg") no-repeat center center;
   background-size: contain;
   border: none;
   cursor: pointer;
@@ -258,27 +258,42 @@ footer {
   opacity: 0;
 }
 
-  /* Size and theme */
-  .photoIcon {      /* change to match your theme */
-    color: var(--svg_color);
-  width: 160px;  
+/* Size and theme */
+.photoIcon {
+  /* change to match your theme */
+  color: var(--svg_color);
+  width: 160px;
   height: 160px;
   margin: 0 auto;
 }
-  .photoIcon svg { width: 100%; height: 100%; display: block; }
+.photoIcon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
-  /* Gentle floating animation */
-  .photoIcon svg { animation: floatY 3.5s ease-in-out infinite; }
-  @keyframes floatY {
-    0%,100% { transform: translateY(0); }
-    50%     { transform: translateY(-4px); }
+/* Gentle floating animation */
+.photoIcon svg {
+  animation: floatY 3.5s ease-in-out infinite;
+}
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
   }
-
+  50% {
+    transform: translateY(-4px);
+  }
+}
 
 @media (min-width: 768px) {
   .photoIcon {
-    width: 200px;  
+    width: 200px;
     height: 200px;
   }
 }
 
+*::placeholder {
+  color: var(--muted); /* change to your desired color */
+  opacity: 1; /* make sure it's fully visible */
+}

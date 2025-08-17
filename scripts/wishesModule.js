@@ -10,7 +10,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
-  getDocs
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Firebase config
@@ -71,13 +71,15 @@ wishForm.addEventListener("submit", async (e) => {
 
 // ====== DOWNLOAD WISHES AS JSON ======
 
-document.getElementById("download-wishes").addEventListener("click", async () => {
+document
+  .getElementById("download-wishes")
+  .addEventListener("click", async () => {
     const snapshot = await getDocs(q);
-    const wishes = snapshot.docs.map(doc => doc.data());
-    
+    const wishes = snapshot.docs.map((doc) => doc.data());
+
     let text = "Name\tDate\tWish\n";
-    wishes.forEach(w => {
-        text += `${w.name}\t${w.ts?.toDate().toLocaleDateString()}\t${w.text}\n`;
+    wishes.forEach((w) => {
+      text += `${w.name}\t${w.ts?.toDate().toLocaleDateString()}\t${w.text}\n`;
     });
 
     const blob = new Blob([text], { type: "text/plain" });
@@ -89,6 +91,4 @@ document.getElementById("download-wishes").addEventListener("click", async () =>
     a.click();
 
     URL.revokeObjectURL(url);
-
-});
-
+  });
