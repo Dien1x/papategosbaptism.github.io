@@ -30,6 +30,7 @@ a {
 
 img {
   max-width: 100%;
+  max-height: 225px;
   display: block;
 }
 
@@ -213,6 +214,7 @@ footer {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 10px;
   justify-items: center;
+  margin: 0 40px;
 }
 .gallery img,
 .gallery video {
@@ -250,6 +252,9 @@ footer {
   .lightbox.open {
     display: none;
   }
+.gallery {
+  margin: 0;
+}
 }
 
 #download-wishes {

@@ -144,9 +144,22 @@ form {
 }
 
 .uploader-group {
-  margin-bottom: 30px; /* Adjust the space as needed */
+  margin-bottom: 5px; /* Adjust the space as needed */
   padding: 10px;        /* Optional: inner spacing */
   border-bottom: 1px solid #ccc; /* Optional: separator line */
+}
+
+.uploader-group h3{
+border: 2px solid var(--border_color);
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f0f0f0; /* Light background for contrast */
+  text-align: center;
+  font-family: sans-serif;
+  color: var(--font_color);
+  margin-bottom: 20px; /* Space below the title */
+  width: fit-content;
+  justify-self: center;
 }
 
 /* Upload progress container */
