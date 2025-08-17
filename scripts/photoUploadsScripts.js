@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const REQUIRE_APPROVAL = true; // set to false to auto-approve uploads
+const REQUIRE_APPROVAL = false; // set to false to auto-approve uploads
 const CLOUDINARY_CLOUD_NAME = "dznoiv1vf";
 const CLOUDINARY_UNSIGNED_PRESET = "ngmtkuac";
 
