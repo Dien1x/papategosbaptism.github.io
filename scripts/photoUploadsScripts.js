@@ -26,6 +26,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const uploadsCol = collection(db, "uploads");
 
 // ===== HELPERS =====
 function normalizeName(name) {
@@ -39,38 +40,17 @@ function normalizeName(name) {
 }
 
 // ===== ELEMENTS =====
-const galleryContent = document.getElementById("galleryContent");
-
-// ===== DYNAMIC FORMS =====
-function renderUploadForm() {
-  galleryContent.innerHTML = `
-    <h2>Ανεβάστε τις Φωτογραφίες/Βίντεο σας ✨</h2>
-    <form id="uploadForm">
-      <input id="uploaderName" type="text" placeholder="Your Name" required />
-      <input id="fileInput" type="file" accept="image/*,video/*" multiple required />
-      <button type="submit">Upload</button>
-    </form>
-  `;
-  const uploadForm = document.getElementById("uploadForm");
-  uploadForm.addEventListener("submit", handleUpload);
-}
-
-function renderGalleryContainer() {
-  galleryContent.innerHTML = `
-    <h2>Βιβλιοθήκη Εικόνων</h2>
-    <div id="gallery" class="grid"></div>
-  `;
-}
+const uploadForm = document.getElementById("uploadForm");
+const gallery = document.getElementById("gallery");
 
 // ===== UPLOAD HANDLER =====
-async function handleUpload(e) {
+uploadForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const rawName = document.getElementById("uploaderName").value;
   const files = document.getElementById("fileInput").files;
   if (!files.length) return;
 
   const prettyName = normalizeName(rawName);
-  const uploadsCol = collection(db, "uploads");
 
   for (let file of files) {
     const formData = new FormData();
@@ -82,65 +62,70 @@ async function handleUpload(e) {
       body: formData
     });
     const data = await res.json();
-    const url = data.secure_url;
 
     await addDoc(uploadsCol, {
       uploaderName: prettyName,
-      url,
+      url: data.secure_url,
       type: file.type.startsWith("video") ? "video" : "image",
       ts: Date.now(),
       approved: !REQUIRE_APPROVAL
     });
   }
 
-  e.target.reset();
+  uploadForm.reset();
   if (REQUIRE_APPROVAL) alert("Uploaded! Waiting for approval.");
-}
+});
 
 // ===== GALLERY RENDER =====
 function renderGallery(items) {
-  const gallery = document.getElementById("gallery");
-  gallery.innerHTML = items
-    .map(
-      (item) => `
-      <div class="card">
-        <strong>${item.uploaderName}</strong>
-        ${
-          item.type === "image"
-            ? `<img src="${item.url}" alt="Upload">`
-            : `<video src="${item.url}" controls></video>`
-        }
+  // Group by uploader name
+  const grouped = items.reduce((acc, item) => {
+    if (!acc[item.uploaderName]) acc[item.uploaderName] = [];
+    acc[item.uploaderName].push(item);
+    return acc;
+  }, {});
+
+  gallery.innerHTML = Object.entries(grouped)
+    .map(([name, uploads]) => `
+      <div class="uploader-group">
+        <h3>${name}</h3>
+        <div class="gallery">
+          ${uploads.map(u => 
+            u.type === "image"
+              ? `<img src="${u.url}" alt="Upload" data-lightbox>`
+              : `<video src="${u.url}" controls></video>`
+          ).join('')}
+        </div>
       </div>
-    `
-    )
-    .join("");
+    `).join('');
+
+  initLightbox(); // initialize lightbox for new images
 }
 
-// ===== LIVE LISTENER (Only Approved) =====
-function setupLiveGallery() {
-  const uploadsCol = collection(db, "uploads");
-  const q = query(uploadsCol, orderBy("ts", "desc"));
-  onSnapshot(q, (snapshot) => {
-    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    const approvedItems = items.filter(i => i.approved);
-    renderGallery(approvedItems);
+// ===== LIVE LISTENER =====
+const q = query(uploadsCol, orderBy("ts", "desc"));
+onSnapshot(q, (snapshot) => {
+  const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const approvedItems = items.filter(i => i.approved);
+  renderGallery(approvedItems);
+});
+
+// ===== LIGHTBOX =====
+function initLightbox() {
+  const lightbox = document.getElementById("lightbox") || createLightbox();
+  document.querySelectorAll('img[data-lightbox]').forEach(img => {
+    img.onclick = () => {
+      lightbox.innerHTML = `<img src="${img.src}">`;
+      lightbox.classList.add("open");
+    };
   });
 }
 
-// ===== INITIAL SETUP =====
-document.getElementById('uploadButton').addEventListener('click', renderUploadForm);
-document.getElementById('watchGallery').addEventListener('click', () => {
-  renderGalleryContainer();
-  setupLiveGallery();
-});
-
-// Smooth anchor scroll
-document.querySelectorAll('a[href^="#"]').forEach((a) => {
-  a.addEventListener("click", (e) => {
-    const id = a.getAttribute("href");
-    if (id.length > 1) {
-      e.preventDefault();
-      document.querySelector(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  });
-});
+function createLightbox() {
+  const lb = document.createElement("div");
+  lb.id = "lightbox";
+  lb.className = "lightbox";
+  lb.onclick = () => lb.classList.remove("open");
+  document.body.appendChild(lb);
+  return lb;
+}
